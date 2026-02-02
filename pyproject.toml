@@ -1,0 +1,64 @@
+[project]
+name = "generic-inspection"
+version = "0.1.0"
+description = "Utilities for generic type inspection in Python."
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+readme = "README.md"
+authors = [
+    { name = "Aiden Nibali", email = "dismaldenizen@gmail.com" }
+]
+requires-python = ">=3.10"
+dependencies = [
+    "typing-inspection>=0.4.2",
+]
+
+[build-system]
+requires = ["uv_build>=0.9.15,<0.10.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "mypy>=1.19.1",
+    "ruff>=0.14.14",
+    "rust-just>=1.46.0",
+]
+
+test = [
+    "pytest>=9.0.2",
+]
+
+[tool.ruff]
+exclude = [
+    ".venv",
+    ".git",
+    ".pytest_cache",
+]
+line-length = 120
+indent-width = 4
+
+[tool.ruff.per-file-target-version]
+"tests/py311/*.py" = "py311"
+"tests/py312/*.py" = "py312"
+"tests/py313/*.py" = "py313"
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "COM812",  # missing-trailing-comma
+]
+pydocstyle.convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*" = [
+    "D1",  # undocumented-*
+    "S101",  # assert
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.mypy]
+files = ["src", "tests"]
+strict = true
