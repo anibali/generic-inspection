@@ -1,5 +1,5 @@
 test-py python_version:
-    uv run --isolated --frozen --active --python {{python_version}} --group test pytest
+    uv run --isolated --frozen --python {{python_version}} --group test pytest
 
 test-py310: (test-py "3.10")
 test-py311: (test-py "3.11")
