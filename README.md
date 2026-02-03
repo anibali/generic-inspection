@@ -27,9 +27,10 @@ We can infer the specialised type arguments of a subclass
 with respect to the class type parameters of a particular base class
 using the `infer_generic_args` function.
 
-```ipython
+```pycon
+>>> from generic_inspection import infer_generic_args
 >>> infer_generic_args(Machine, NumberTextMachine)
-(float, str)
+(<class 'float'>, <class 'str'>)
 ```
 
 The results here tell us that `InputT` is `float` and `OutputT` is `str`.
