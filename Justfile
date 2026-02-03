@@ -1,5 +1,5 @@
 test-py python_version:
-    VIRTUAL_ENV=.venv/test uv run --frozen --active --python {{python_version}} --group test pytest
+    uv run --isolated --frozen --active --python {{python_version}} --group test pytest
 
 test-py310: (test-py "3.10")
 test-py311: (test-py "3.11")
@@ -18,4 +18,4 @@ lint:
 type-check:
     mypy
 
-check-all: lint type-check test
+check-all: lint type-check test-all
