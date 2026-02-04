@@ -44,6 +44,20 @@ uv sync --frozen --all-groups
 just test
 ```
 
+### Release process
+
+The release process is automatic after pushing a semver tag to main.
+
+```bash
+# Ensure that the correct version number is in pyproject.toml.
+head pyproject.toml
+# Create the tag.
+git tag -a v0.1.0 -m "Release v0.1.0"
+# Push the tag.
+git push --tags
+# Check GitHub Actions and PyPI to verify successful publication.
+```
+
 ## Similar projects
 
 - https://github.com/Hochfrequenz/python-generics
