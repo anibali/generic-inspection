@@ -57,7 +57,7 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     environment:
-      name: testpypi
+      name: pypi
     permissions:
       id-token: write
     steps:
@@ -69,5 +69,3 @@ jobs:
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          repository-url: https://test.pypi.org/legacy/
