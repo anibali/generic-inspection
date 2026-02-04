@@ -2,13 +2,16 @@ name: Run linting and tests
 
 on:
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
   push:
-    branches: [ main ]
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
   lint:
+    name: Lint, check formatting, and type check
     runs-on: ubuntu-latest
 
     steps:
@@ -32,6 +35,7 @@ jobs:
         run: uv run mypy
 
   test:
+    name: Run tests
     needs: lint
     runs-on: ubuntu-latest
     strategy:
