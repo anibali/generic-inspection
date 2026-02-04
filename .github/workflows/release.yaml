@@ -1,0 +1,81 @@
+name: Release the package
+
+on:
+  push:
+    tags:
+      - v*.*.*
+
+jobs:
+  build:
+    name: Build package
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          version: "0.9.15"
+
+      - name: Build source distribution and wheel
+        run: uv build --sdist --wheel
+
+      - name: Upload source distribution and wheel
+        uses: actions/upload-artifact@v6
+        with:
+          name: python-package-distributions
+          path: dist/*-*.*
+
+  test:
+    name: Test package
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version:
+          - "3.10"
+          - "3.11"
+          - "3.12"
+          - "3.13"
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          version: "0.9.15"
+          python-version: ${{ matrix.python-version }}
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v7
+        with:
+          name: python-package-distributions
+          path: dist/
+
+      - name: Run isolated tests on the source distribution
+        run: uv run --isolated --no-project --with-requirements <(uv export --only-group test --no-hashes) --with dist/*.tar.gz pytest
+
+      - name: Run isolated tests on the wheel
+        run: uv run --isolated --no-project --with-requirements <(uv export --only-group test --no-hashes) --with dist/*.whl pytest
+
+  publish:
+    name: Publish package
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+    permissions:
+      id-token: write
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v7
+        with:
+          name: python-package-distributions
+          path: dist/
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
